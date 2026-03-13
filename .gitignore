@@ -1,0 +1,3 @@
+# Binaries and Compilation Objects
+bin/*
+build/*
