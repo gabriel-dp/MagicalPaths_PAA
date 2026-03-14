@@ -24,3 +24,22 @@ To run the program you must provide `{input_path}` and `{output_path}` with the 
 ```bash
 ./bin/tp -i {input_path} -o {output_path}
 ```
+
+&nbsp;
+
+## Memory leak tests
+
+You must have `valgrind` installed in your machine:
+
+```bash
+sudo apt install valgrind
+```
+
+And normally run the program using it:
+
+```bash
+valgrind ./bin/tp -i {input_path} -o {output_path}
+```
+
+It is expected to display:\
+`All heap blocks were freed -- no leaks are possible`
