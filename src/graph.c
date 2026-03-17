@@ -8,6 +8,7 @@ Graph* create_graph(int size) {
     Graph* graph = malloc(sizeof(Graph));
 
     graph->size = size;
+    graph->edges_count = 0;
     graph->adjacents = malloc(size * sizeof(Edge*));
     for (int i = 0; i < size; i++) {
         graph->adjacents[i] = NULL;
@@ -24,6 +25,7 @@ void create_edge(Graph* graph, NodeId origin, NodeId destination, CostUnit cost)
 
     edge->next = graph->adjacents[origin];
     graph->adjacents[origin] = edge;
+    graph->edges_count++;
 }
 
 // Displays the current nodes and edges of the graph

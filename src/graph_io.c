@@ -32,5 +32,16 @@ Graph* read_graph(char* input_path, int* K) {
 }
 
 // Writes results in the output file
-void write_results(char* output_path) {
+void write_results(char* output_path, CostUnit* results, int K) {
+    FILE* output_file = fopen(output_path, "w");
+    if (output_file == NULL) throwError("OUTPUT", "Cannot write to file");
+
+    // Writes one line with the K minimum paths separated using whitespaces: K1 K2 K3
+    for (int i = 0; i < K; i++) {
+        if (results[i] == 0) break;
+        if (i != 0) fprintf(output_file, " ");
+        fprintf(output_file, "%d", results[i]);
+    }
+
+    fclose(output_file);
 }

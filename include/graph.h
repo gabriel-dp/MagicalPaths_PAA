@@ -12,6 +12,7 @@ typedef struct Edge {
 
 typedef struct {
     int size;
+    int edges_count;
     Edge** adjacents;
 } Graph;
 
