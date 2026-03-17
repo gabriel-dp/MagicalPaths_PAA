@@ -20,7 +20,7 @@ Graph* reverse_graph(Graph* graph) {
     return reverse;
 }
 
-// Gets the minimum distance from source to all other nodes
+// Dijkstra algorithm, gets the minimum distance from a source to all other nodes
 CostUnit* dijkstra(Graph* graph, NodeId source, NodeId parent[]) {
     CostUnit* distances = malloc(sizeof(CostUnit) * graph->size);
     int visited[graph->size];
@@ -70,12 +70,13 @@ Heap* build_sidetracks_heap(Graph* graph, CostUnit* distances_to_destination, No
             int v = e->destination;
             CostUnit w = e->cost;
 
-            // Skip the edge used in the shortest path tree
+            // Skips the edges used in the shortest path tree
             if (parent[u] == v) {
                 e = e->next;
                 continue;
             }
 
+            // Inserts the cost of the new path using the sidetrack edge in the min heap
             CostUnit delta = w + distances_to_destination[v] - distances_to_destination[u];
             heap_push(min_heap, distances_to_destination[source] + delta);
 
