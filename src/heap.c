@@ -32,11 +32,35 @@ void heap_push(Heap* h, CostUnit element) {
     }
 }
 
-// Pop operation removes the first element
-// No insertions must be done after popping out an element!!
-CostUnit heap_pop(Heap* heap) {
-    CostUnit result = heap->data[heap->removed++];
-    heap->size--;
+// Pop operation removes the first element and organize heap
+CostUnit heap_pop(Heap* h) {
+    CostUnit result = h->data[0];
+
+    h->data[0] = h->data[--h->size];
+
+    int i = 0;
+
+    while (1) {
+        int l = 2 * i + 1;
+        int r = 2 * i + 2;
+        int smallest = i;
+
+        if (l < h->size && h->data[l] < h->data[smallest])
+            smallest = l;
+
+        if (r < h->size && h->data[r] < h->data[smallest])
+            smallest = r;
+
+        if (smallest == i)
+            break;
+
+        CostUnit tmp = h->data[i];
+        h->data[i] = h->data[smallest];
+        h->data[smallest] = tmp;
+
+        i = smallest;
+    }
+
     return result;
 }
 
