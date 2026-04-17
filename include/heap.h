@@ -3,16 +3,31 @@
 
 #include "graph.h"
 
-typedef struct {
-    CostUnit* data;
-    int size;
-    int removed;
-} Heap;
+typedef struct HeapNode {
+    Sidetrack s;
+    struct HeapNode *left, *right;
+    int rank;
+} HeapNode;
 
-Heap* create_heap(int size);
-void heap_push(Heap* heap, CostUnit element);
-CostUnit heap_pop(Heap* heap);
-void free_heap(Heap* heap);
-void print_heap(Heap* heap);
+typedef struct {
+    CostUnit cost;
+    HeapNode* heap;
+} PathNode;
+
+typedef struct {
+    PathNode* data;
+    int size;
+    int capacity;
+} BinaryHeap;
+
+HeapNode* create_heap_node(Sidetrack s);
+HeapNode* heap_merge(HeapNode* a, HeapNode* b);
+
+BinaryHeap* create_binary_heap(int capacity);
+void binary_heap_push_path(BinaryHeap* h, PathNode value);
+PathNode binary_heap_pop_path(BinaryHeap* h);
+
+void print_pathnode(PathNode p);
+void print_binary_heap(BinaryHeap* h);
 
 #endif

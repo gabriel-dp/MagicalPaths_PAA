@@ -43,3 +43,19 @@ valgrind ./bin/tp -i {input_path} -o {output_path}
 
 It is expected to display:\
 `All heap blocks were freed -- no leaks are possible`
+
+&nbsp;
+
+## Performance tests
+
+In `/tests` folder you can find some specific test cases, being:
+
+- `input` = Instructions example graph
+- `input2` = Eppstein's article graph
+- `input3` = Self-loop cycle graph
+
+But this is not enough to test the performance, since its necessary to test with large graphs. For this task, run the random generator also in `/tests` folder, it is guaranteed that there will be at least a path from 1 to N. You can configure the constants as you wish.
+
+```bash
+python3 tests/random_generator.py
+```
