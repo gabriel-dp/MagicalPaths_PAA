@@ -57,3 +57,16 @@ void free_graph(Graph* graph) {
     free(graph->adjacents);
     free(graph);
 }
+
+// Creates a new graph swapping all origins and destinations from edges
+Graph* reverse_graph(Graph* graph) {
+    Graph* reverse = create_graph(graph->size);
+    for (int v = 0; v < graph->size; v++) {
+        Edge* edge = graph->adjacents[v];
+        while (edge != NULL) {
+            create_edge(reverse, edge->destination, v, edge->cost);
+            edge = edge->next;
+        }
+    }
+    return reverse;
+}

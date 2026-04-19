@@ -21,9 +21,13 @@ typedef struct Sidetrack {
     CostUnit delta;
 } Sidetrack;
 
+// Base graph functions
 Graph* create_graph(int size);
 void create_edge(Graph* graph, NodeId origin, NodeId destination, CostUnit cost);
 void print_graph(Graph* graph);
 void free_graph(Graph* graph);
+
+// Utility graph functions
+Graph* reverse_graph(Graph* graph);
 
 #endif

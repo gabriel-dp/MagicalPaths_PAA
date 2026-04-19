@@ -1,15 +1,42 @@
-#include "../include/heap.h"
+#include "../include/heaps.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-/* === LEFTIST HEAP ==== */
+/* ========== LEFTIST HEAP ==========
+ * Persistent heap optimized for fast merges
+ * Used to store sidetracks by its delta value
+ *
+ * Free all HeapNode structures created is a hard task
+ * A same pointer can be used in multiple heaps simultaneously
+ * To avoid memory leaks, all created nodes are registered in an array
+ * ================================== */
+
+HeapNode** all_nodes = NULL;
+int node_count = 0;
+int node_capacity = 0;
+
+void freeAllHeapNodes() {
+    for (int i = 0; i < node_count; i++) {
+        free(all_nodes[i]);
+    }
+    free(all_nodes);
+}
+
+void register_node(HeapNode* node) {
+    if (node_count == node_capacity) {
+        node_capacity = node_capacity ? node_capacity * 2 : 1024;
+        all_nodes = realloc(all_nodes, node_capacity * sizeof(HeapNode*));
+    }
+    all_nodes[node_count++] = node;
+}
 
 HeapNode* create_heap_node(Sidetrack s) {
     HeapNode* h = malloc(sizeof(HeapNode));
     h->s = s;
     h->left = h->right = NULL;
     h->rank = 1;
+    register_node(h);
     return h;
 }
 
@@ -25,6 +52,7 @@ HeapNode* heap_merge(HeapNode* a, HeapNode* b) {
 
     HeapNode* new = malloc(sizeof(HeapNode));
     *new = *a;
+    register_node(new);
 
     new->right = heap_merge(a->right, b);
 
@@ -42,7 +70,10 @@ HeapNode* heap_merge(HeapNode* a, HeapNode* b) {
     return new;
 }
 
-/* === BINARY HEAP ==== */
+/* ========== BINARY HEAP ==========
+ * Used to store PathNode structures by its cost value
+ * The smallest-cost path is always at the root
+ * ================================= */
 
 BinaryHeap* create_binary_heap(int capacity) {
     BinaryHeap* h = malloc(sizeof(BinaryHeap));
@@ -106,19 +137,8 @@ PathNode binary_heap_pop_path(BinaryHeap* h) {
     return result;
 }
 
-void print_pathnode(PathNode p) {
-    if (!p.heap) {
-        printf("[cost=%d, heap=NULL]\n", p.cost);
-        return;
-    }
-    printf("[cost=%d | delta=%d | edge=%d->%d | heap=%p]\n", p.cost, p.heap->s.delta, p.heap->s.from + 1, p.heap->s.to + 1, (void*)p.heap);
-}
-
-void print_binary_heap(BinaryHeap* h) {
-    printf("\n=== BINARY HEAP (size=%d) ===\n", h->size);
-    for (int i = 0; i < h->size; i++) {
-        printf("i=%d ", i);
-        print_pathnode(h->data[i]);
-    }
-    printf("============================\n");
+void freeBinaryHeap(BinaryHeap* heap) {
+    if (!heap) return;
+    free(heap->data);
+    free(heap);
 }
